@@ -1,11 +1,9 @@
-from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
+    Application,
     CommandHandler,
     CallbackQueryHandler,
-    MessageHandler,
-    Filters,
-    Application,
-    CallbackContext,
+    ContextTypes
 )
 from collections import defaultdict
 
@@ -17,7 +15,7 @@ YOUR_TELEGRAM_ID = YOUR_TELEGRAM_ID  # Replace with your actual Telegram ID
 # Simple in-memory dictionary to track user balances (for demonstration purposes)
 user_balances = defaultdict(int)
 
-async def start(update: Update, context: CallbackContext) -> None:
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles the /start command with an introductory message and inline buttons."""
     user = update.message.from_user
 
@@ -49,7 +47,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     log_message = f"User started the bot:\nUsername: @{user.username}\nUser ID: {user.id}"
     await context.bot.send_message(chat_id=LOG_CHANNEL_ID, text=log_message)
 
-async def button_callback(update: Update, context: CallbackContext) -> None:
+async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles button callbacks for different star packages."""
     query = update.callback_query
     await query.answer()
@@ -62,7 +60,7 @@ async def button_callback(update: Update, context: CallbackContext) -> None:
     elif query.data == "buy_2000":
         await process_payment(query.message.chat_id, context, "2000 Stars", "buy_2000", 2000)
 
-async def process_payment(chat_id, context, title, payload, stars) -> None:
+async def process_payment(chat_id, context: ContextTypes.DEFAULT_TYPE, title, payload, stars) -> None:
     """Simulates a payment process by updating user balance and logging the transaction."""
     # Add stars to the user's balance
     user_id = chat_id
@@ -75,7 +73,7 @@ async def process_payment(chat_id, context, title, payload, stars) -> None:
     # Send confirmation to the user
     await context.bot.send_message(chat_id=chat_id, text=f"Thank you for purchasing {title}! You now have {user_balances[user_id]} stars.")
 
-async def terms(update: Update, context: CallbackContext) -> None:
+async def terms(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles the /terms command with non-refundable payment terms."""
     terms_message = (
         "Please note: All payments are final and non-refundable.\n"
@@ -84,7 +82,7 @@ async def terms(update: Update, context: CallbackContext) -> None:
     )
     await update.message.reply_text(terms_message)
 
-async def balance(update: Update, context: CallbackContext) -> None:
+async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Allows users to check their current star balance."""
     user_id = update.message.from_user.id
     balance = user_balances[user_id]

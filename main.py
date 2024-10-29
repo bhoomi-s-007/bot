@@ -8,9 +8,9 @@ from telegram.ext import (
 from collections import defaultdict
 
 # Replace these with your Bot Token, Log Channel ID, and your Telegram ID
-BOT_TOKEN = 'YOUR_BOT_TOKEN'
-LOG_CHANNEL_ID = YOUR_LOG_CHANNEL_ID  # Replace with the ID of your log channel or group
-YOUR_TELEGRAM_ID = YOUR_TELEGRAM_ID  # Replace with your actual Telegram ID
+BOT_TOKEN = '7507821106:AAF1e07OSYaatMJYMKM0Sr5cBAcU6BwCm1A'
+LOG_CHANNEL_ID = '-1002273435527'
+YOUR_TELEGRAM_ID = '1822190035'
 
 # Simple in-memory dictionary to track user balances (for demonstration purposes)
 user_balances = defaultdict(int)

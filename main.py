@@ -7,7 +7,7 @@ from telegram.ext import (
 )
 from collections import defaultdict
 
-# Replace these with your Bot Token and log channel ID
+# Replace these with your Bot Token, Log Channel ID, and your Telegram ID
 BOT_TOKEN = 'YOUR_BOT_TOKEN'
 LOG_CHANNEL_ID = YOUR_LOG_CHANNEL_ID  # Replace with the ID of your log channel or group
 YOUR_TELEGRAM_ID = YOUR_TELEGRAM_ID  # Replace with your actual Telegram ID
@@ -52,22 +52,22 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     await query.answer()
 
-    # Determine which package was selected and update the user's balance
+    # Determine which package was selected and add stars to the user's balance
     if query.data == "buy_500":
-        await process_payment(query.message.chat_id, context, "500 Stars", "buy_500", 500)
+        await process_stars_purchase(query.message.chat_id, context, "500 Stars", 500)
     elif query.data == "buy_1000":
-        await process_payment(query.message.chat_id, context, "1000 Stars", "buy_1000", 1000)
+        await process_stars_purchase(query.message.chat_id, context, "1000 Stars", 1000)
     elif query.data == "buy_2000":
-        await process_payment(query.message.chat_id, context, "2000 Stars", "buy_2000", 2000)
+        await process_stars_purchase(query.message.chat_id, context, "2000 Stars", 2000)
 
-async def process_payment(chat_id, context: ContextTypes.DEFAULT_TYPE, title, payload, stars) -> None:
-    """Simulates a payment process by updating user balance and logging the transaction."""
+async def process_stars_purchase(chat_id, context: ContextTypes.DEFAULT_TYPE, title, stars) -> None:
+    """Simulates a stars purchase by updating user balance and logging the transaction."""
     # Add stars to the user's balance
     user_id = chat_id
     user_balances[user_id] += stars
 
-    # Log the payment to the log channel
-    log_message = f"User made a purchase:\nUser ID: {user_id}\nPurchased: {title}\nNew Balance: {user_balances[user_id]} stars"
+    # Log the purchase to the log channel
+    log_message = f"User made a stars purchase:\nUser ID: {user_id}\nPurchased: {title}\nNew Balance: {user_balances[user_id]} stars"
     await context.bot.send_message(chat_id=LOG_CHANNEL_ID, text=log_message)
 
     # Send confirmation to the user
